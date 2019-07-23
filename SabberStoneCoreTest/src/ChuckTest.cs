@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using SabberStoneCore.Config;
+using SabberStoneCore.Enums;
 using SabberStoneCore.Model;
 using SabberStoneCore.Tasks.PlayerTasks;
 using Xunit;
@@ -19,11 +20,19 @@ namespace SabberStoneCoreTest.src
 		}
 	}
 
-	public class ChuckTest:TestBase
+	public class ChuckTest : TestBase
 	{
 		public ChuckTest(ITestOutputHelper output) : base(output)
 		{
 
+		}
+
+		private GameConfig GetGameConfig()
+		{
+			GameConfig gameConfig = new GameConfig();
+			gameConfig.Player1HeroClass = CardClass.WARLOCK;
+			gameConfig.Player2HeroClass = CardClass.SHAMAN;
+			return gameConfig;
 		}
 
 		[Fact]
@@ -31,7 +40,7 @@ namespace SabberStoneCoreTest.src
 		{
 			try
 			{
-				GameConfig gameConfig = new GameConfig();
+				GameConfig gameConfig = GetGameConfig();
 				Game game = new Game(gameConfig);
 				var currentPlayer = game.CurrentPlayer;
 				if (currentPlayer == null)
@@ -39,6 +48,7 @@ namespace SabberStoneCoreTest.src
 					Output.WriteLine("currentPlayer is null");
 					return;
 				}
+
 				List<PlayerTask> options = currentPlayer.Options();
 				foreach (var task in options)
 				{
