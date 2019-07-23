@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SabberStoneCore.Config;
 using SabberStoneCore.Enums;
 using SabberStoneCore.Model;
@@ -74,9 +75,16 @@ namespace SabberStoneCoreTest.src
 		/// <returns></returns>
 		private List<Card> GetPlayer2Deck()
 		{
-			var obj = JsonConvert.DeserializeObject(_response);
-			Output.WriteLine(obj.ToString());
-			return null;
+			List<Card> list = new List<Card>();
+			dynamic obj = JsonConvert.DeserializeObject(_response);
+			//Output.WriteLine(obj.ToString());
+			JArray array = obj.friendly_deck.cards;
+			foreach (var item in array)
+			{
+				var card = Cards.FromId(item.ToString());
+				list.Add(card);
+			}
+			return list;
 		}
 
 		private GameConfig GetGameConfig()
