@@ -36,7 +36,7 @@ namespace SabberStoneCoreTest.src
 		public ChuckTest(ITestOutputHelper output) : base(output)
 		{
 			_response = GetResponse().Result;
-			Output.WriteLine(_response);
+			//Output.WriteLine(_response);
 		}
 
 		private async Task<string> GetResponse()
@@ -65,7 +65,16 @@ namespace SabberStoneCoreTest.src
 		/// <returns></returns>
 		private List<Card> GetPlayer1Deck()
 		{
-			return null;
+			List<Card> list = new List<Card>();
+			dynamic obj = JsonConvert.DeserializeObject(_response);
+			//Output.WriteLine(obj.ToString());
+			JArray array = obj.opposing_deck.cards;
+			foreach (var item in array)
+			{
+				var card = Cards.FromId(item.ToString());
+				list.Add(card);
+			}
+			return list;
 		}
 
 		/// <summary>
@@ -104,6 +113,7 @@ namespace SabberStoneCoreTest.src
 			{
 				GameConfig gameConfig = GetGameConfig();
 				Game game = new Game(gameConfig);
+				game.StartGame();
 				var currentPlayer = game.CurrentPlayer;
 				if (currentPlayer == null)
 				{
