@@ -100,9 +100,12 @@ namespace SabberStoneCoreTest.src
 		{
 			GameConfig gameConfig = new GameConfig();
 			gameConfig.Player1HeroClass = CardClass.WARLOCK;
+			gameConfig.Player1Name = "小晴天";
 			gameConfig.Player2HeroClass = CardClass.SHAMAN;
+			gameConfig.Player2Name = "子非鱼";
 			gameConfig.Player1Deck = GetPlayer1Deck();
 			gameConfig.Player2Deck = GetPlayer2Deck();
+			gameConfig.StartPlayer = 2;
 			return gameConfig;
 		}
 
@@ -113,6 +116,8 @@ namespace SabberStoneCoreTest.src
 			{
 				GameConfig gameConfig = GetGameConfig();
 				Game game = new Game(gameConfig);
+				game.Player1.BaseMana = 5;
+				game.Player2.BaseMana = 5;
 				game.StartGame();
 				var currentPlayer = game.CurrentPlayer;
 				if (currentPlayer == null)
