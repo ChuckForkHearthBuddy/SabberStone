@@ -13,6 +13,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
@@ -23,7 +24,7 @@ namespace SabberStoneCore.Loader
 {
 	internal interface ICardLoader
 	{
-		Card[] Load();
+		Card[] Load(Locale locale);
 	}
 
 	internal class CardLoader : ICardLoader
@@ -81,7 +82,7 @@ namespace SabberStoneCore.Loader
 			return dict;
 		}
 
-		public Card[] Load()
+		public Card[] Load(Locale locale)
 		{
 			// Get XML definitions from assembly embedded resource
 			var cardDefsXml =
@@ -106,7 +107,7 @@ namespace SabberStoneCore.Loader
 												: (tag.Attribute("type").Value == "String"
 													? (TagValue)tag.Value
 													: (tag.Attribute("type").Value == "LocString"
-														? (TagValue)tag.Element("enUS").Value
+														? (TagValue)tag.Element(locale.ToString(CultureInfo.InvariantCulture)).Value
 														: (TagValue)0
 													)))).ToArray(),
 								Requirements = (from req in r.Descendants("PlayRequirement")
